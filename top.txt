@@ -1,0 +1,62 @@
+<table id="infobox" align="CENTER" width="95%" border="1" cellpadding="5" cellspacing="7"><tbody><tr><td>
+<details closed>
+<summary><big>Info</big></summary>
+<h1>Kolyma Network Anti-Spam Database</h1>
+<hr>
+<p>This service is for the following:</p>
+<ul>
+    <li>Finding and catalogging IP adresses which are used to spam bulletin boards.</li>
+    <li>Publicly listing said IP adresses so they they may be easily blocked.</li>
+</ul>
+<p>This service is provided for free and is maintained by 9CGMOD, a branch of the <a href="https://centralgroup.kolyma.org">9chan Central Group</a>, which handles content management.</p>
+<h2>I am Blocked, But I Dont Spam!</h2>
+<p>Accidentally in one of our lists? Please email spam@kolyma.org with your IP and we will look into the matter.</p>
+<h2>Cooperation with 9CGSEC to Capture Cybercriminals</h2>
+<p>This database works closely with Security Operatives from the 9chan Central Group Security and its subdivisions to ensure that our sites and sites that ask for our protection stay safe.</p>
+<p>This database will also cooperate with Government Authorities to capture and arrest cybercriminals.</p>
+<p>Got a tip on a wanted person? Email fraudauthority@kolyma.org</p>
+<h2>Submit IP adresses or Criminal Organizations</h2>
+<p>To submit an IP adress to the database, please use the form below, select the category the IP belongs to, and then submit. The submission will have to be verified by an agent of the Kolyma Network, and once they are verified they are cemented into the database.</p>
+<h3>Categories</h3>
+<ul>
+    <li><b>CP_IP</b> - IP adresses known for uploading, linking to, or otherwise dealing with Child Pornography</li>
+    <li><b>ADV_TXT</b>- List of commonly used catchprases, websites, etc to block</li>
+    <li><b>ADV_IMG</b> - Commonly spammed advertisement images</li>
+    <li><b>ADV_IP</b> - IP adresses known for creating advertisements</li>
+    <li><b>MISC_IP</b> - IP adresses that spam (neither advertisements or cp)</li>
+    <li><b>PROXY_IP</b> - Proxy IP adresses</li>
+</ul>
+<h3>Example Usage</h3>
+<p>To return all ip adresses that spam advertisements, go to <a href="https://spam.kolyma.org/spam.php?key=YOURKEYHERE&spam=ADV_IP&verifonly=on">https://spam.kolyma.org/spam.php?key=YOURKEYHERE&spam=ADV_IP&verifonly=on</a> - and a php filter can be used to check against the users ip adress. Updates for vichan, lynxchan, and other popular imageboard softwares will be put out soon to add compatibility.</p>
+<code>
+<pre>
+$proxies = file_get_contents("https://spam.kolyma.org/spam.php?key=YOURKEYHERE&spam=PROXY_IP&verifonly=on");
+foreach ($proxies as $pattern) {
+  if (preg_match("/$pattern/", <ip_address>)
+   || preg_match("/$pattern/", <host_address>)) {
+    error('ERROR: IP address listed on spam.kolyma.org!');
+  }
+}
+</pre>
+</code>
+<h3>! WARNING !</h3>
+<p>
+    <font color="red">Misusing or abusing this service will have your IP adress added to this database, and all submissions removed.</font>
+</p>
+<h2>A note to imageboard owners</h2>
+<p>You can request an API key at requestkey@kolyma.org - to bypass captcha, easily access databases, etc - if your interested, please email that account with your imageboard details. This process is manual, expect a reply window of 48 hours. Thank you for your cooperation!</p>
+<p>
+    <font color="red">DO NOT UPLOAD IP ADRESSES OF INNOCENT USERS. YOU WILL BE BLACKLISTED.</font>
+</p>
+<hr>
+<span>
+    <h3><b>
+            <font color="red">If you have been unfairly added to this database, you may email spam@kolyma.org with your IP and request a removal. In addition, being banned on a Kolyma Network owned website does not necessarily mean you will end up hear, unless you have spammed, flooded, or conducted other malicious activity.</font>
+        </b></h3>
+</span>
+<small>
+    <address>Copyright &copy; 2005 - Kolyma Network | 1910 Block, Bologoye, Omsk, Russian Federation</address>
+</small>
+</details>
+</td></tr></tbody></table>
+<br clear="ALL" />
