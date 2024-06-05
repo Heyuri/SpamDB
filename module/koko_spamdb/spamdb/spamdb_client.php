@@ -11,7 +11,7 @@ define('CANS_OF_SPAM', array(
 
 function _spamapi($key, $spam, $verifyonly, $c) {
 	$spam_result = array_map('rtrim', file(API_URL.
-		"?key=$key&spam=$spam&verifyonly=".($verifyonly?'on':''),
+		"?key=$key&spam=$spam&verifonly=".($verifyonly?'on':''),
 		false,stream_context_create(array("http" => array(
 			"method" => "POST", "header" => "Content-type: application/x-www-form-urlencoded",
 			"content" => http_build_query(array("c" => $c), "", "&")
