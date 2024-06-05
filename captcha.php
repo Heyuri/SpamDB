@@ -1,11 +1,14 @@
 <?php
+
+// Generic captcha
+
 const CAPTCHA_WIDTH = 100;
 const CAPTCHA_HEIGHT = 20;
 const CAPTCHA_LENGTH = 4;
 const CAPTCHA_GAP = 20;
 const CAPTCHA_TEXTY = 20;
 const CAPTCHA_FONTMETHOD = 0;
-const CAPTCHA_FONTFACE = array('./font1.gdf');
+const CAPTCHA_FONTFACE = array('static/font1.gdf');
 const CAPTCHA_ECOUNT = 2;
 
 @session_start();
