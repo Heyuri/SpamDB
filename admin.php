@@ -1,4 +1,7 @@
 <?php
+
+// Admin functions
+
 require_once('config.inc.php');
 require_once('lib_common.inc.php');
 
@@ -40,8 +43,9 @@ switch ($_GET['action']??'') {
 		$stmt->bind_param("i",$id);
 		$stmt->execute();
 		$row = $stmt->get_result()->fetch_array();
+		$spam = $row["spam"];
 		if (preg_match('/_IMG$/', $spam) && file_exists(FILE_DIR.$row["content"]))
-			@unlink(FILE_DIR.$row["content"]);
+			unlink(FILE_DIR.$row["content"]);
 		$stmt->prepare("DELETE FROM ".SQLTABLE_SPAM." WHERE id=?");
 		$stmt->bind_param("i",$id);
 		$stmt->execute();
