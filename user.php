@@ -1,7 +1,9 @@
 <?php
+
+// User spam submission handler
+
 require_once('config.inc.php');
 require_once('lib_common.inc.php');
-require_once('kaptcha_client.php');
 
 if (!ALLOW_USER) {
 	error('ERROR', 'ERROR: User spam submissions are currently disabled.');
@@ -12,34 +14,42 @@ if ($_SERVER['REQUEST_METHOD']!='POST') {
 }
 
 @session_start();
-if (!in_array($_SESSION['adminpass']??'', $ADMIN)) {
-	die("Users cannot submit entries at this time");
-	if (isset($_POST["_KAPTCHA"])) {
-		if (!kaptcha_validate($_POST["_KAPTCHA_KEY"])) {
-			error('ERROR', 'ERROR: Incorrect Captcha');
-		}
-	}
-} else {
-	$pending = 'verified';
-}
+
+$pending = (in_array($_SESSION['adminpass']??'', $ADMIN) ? "verified" : "pending");
 
 $conn = new mysqli(SQLHOST, SQLUSER, SQLPASS, SQLDB) or die('MySQLi ERROR');
 $stmt = $conn->stmt_init();
 
 $time = $_SERVER['REQUEST_TIME'];
 $safespam = htmlspecialchars($_POST['spam']??'');
+$captcha = md5(strtoupper(htmlspecialchars($_POST['captcha']??'')));
+
+if (!in_array($_SESSION['adminpass']??'', $ADMIN) && $captcha != $_SESSION['captcha_dcode']) error('ERROR', 'ERROR: Invalid captcha!');
+
 if (!in_array($safespam, $cans_of_spam)) {
-	error('ERROR', 'ERROR: There is no spam of can.');
+	error('ERROR', 'ERROR: Invalid spam type.');
 }
 if (preg_match('/_IMG$/', $safespam)) {
-	$f = $_IMGS['fcontent'];
-	$ext = '.'.pathinfo($f['name'],PATHINFO_EXTENSION);
-	if (explode('/', mime_content_type($f['tmp_name']), 2)[0]!='image') {
-		error('ERROR', 'Unsupported file type!');
-	}
-	$safecontent = md5_IMG($f['tmp_name']).$ext;
+	$f = $_FILES['fcontent'];
+	if (!preg_match('/^image\//', $f['type'])) error('ERROR', 'Unsupported file type!');
+	$ext = explode('.', $f['name'])[1];
+	$safecontent = md5_file($f['tmp_name']).$ext; // Temporary
 	$dest = FILE_DIR.$safecontent;
-	move_uploaded_IMG($f['tmp_name'], $dest);
+	move_uploaded_file($f['tmp_name'], $dest); // Upload the file first...
+	// ...Then remove EXIF to match md5 from koko
+	if (function_exists('exif_read_data') && function_exists('exif_imagetype')) {
+        $imageType = exif_imagetype($dest);
+        if ($imageType == IMAGETYPE_JPEG) {
+            $exif = @exif_read_data($dest);
+            if ($exif !== false) {
+                $image = imagecreatefromjpeg($dest);
+                imagejpeg($image, $dest, 100);
+                imagedestroy($image);
+            }
+        }
+    }
+	$safecontent = md5_file($dest); // Get new md5, with clean EXIF
+	rename($dest, FILE_DIR.$safecontent); // Done, yes this is weird
 } elseif (preg_match('/_IP$/', $safespam)) {
 	$safecontent = $_POST['icontent']??'';
 } elseif (preg_match('/_TXT$/', $safespam)) {

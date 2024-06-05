@@ -23,7 +23,7 @@ function error($title='ERROR', $title2='Something went wrong', $description='') 
 		<link type="text/css" rel="stylesheet" href="common.css" media="all" />
 		<style>
 body {
-	background-image: url("brick-wall-bloody.png");
+	background-image: url("static/brick-wall-bloody.png");
 	color: #000;
 	font-size: 90%;
 }
