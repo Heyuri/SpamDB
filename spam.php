@@ -39,9 +39,9 @@ $safeq = htmlspecialchars($_GET['q']??'');
 $safespam = htmlspecialchars($_GET['spam']??'');
 $verifonly = $_GET['verifonly']??'';
 
-$claus = " WHERE (content LIKE '%$safeq%'";
-if ($check) $claus .= " AND '$check' REGEXP content";
-if ($safespam && ($safespam != 'ALL')) $claus .= " AND spam LIKE '".$safespam."'";
+$claus = " WHERE (content LIKE '%".mysqli_real_escape_string($conn, $safeq)."%'";
+if ($check) $claus .= " AND '".mysqli_real_escape_string($conn, $check)."' REGEXP content";
+if ($safespam && ($safespam != 'ALL')) $claus .= " AND spam LIKE '".mysqli_real_escape_string($conn, $safespam)."'";
 if ($verifonly) $claus .= " AND status = 'verified'";
 $claus .= ") ORDER BY id DESC";
 
